@@ -11,6 +11,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.InputStream;
 //import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -24,13 +25,16 @@ import model.Train;
 public class PNRailroad extends JPanel implements ActionListener {
 	private static PNRailroad instance = null;
 	private Image i, i2;
-	private int speed = 500;
+	private int speed = 33;
 	private Train train11,train12,train13;
 	private Train train21,train22,train23;
+	private Train[] rightTrains;
+	private Train[] leftTrains;
+	private int altura, largura;
 	private TrafficLight traffic1;
 	private TrafficLight traffic2;
 	private JButton button1;
-	private Lista trainlist,trainlist2;
+	private Lista trainlist1,trainlist2;
 	private int dist = 20;
 	
 	public PNRailroad(){
@@ -48,35 +52,20 @@ public class PNRailroad extends JPanel implements ActionListener {
 			System.exit(1);
 		}
 		
-		int altura = (int) (i.getHeight(null)*0.8);
-		int largura = (int) (i.getWidth(null)*0.8);
+		altura = (int) (i.getHeight(null)*0.8);
+		largura = (int) (i.getWidth(null)*0.8);
 		
 		//cria lista de trens
-		trainlist = new Lista();
-		train11 = new Train(true, largura, altura);
-		trainlist.insFin(train11);
-		train12 = new Train(true, largura, altura);
-		trainlist.insFin(train12);
-		train13 = new Train(true, largura, altura);
-		trainlist.insFin(train13);
-		
+		trainlist1 = new Lista();
 		trainlist2 = new Lista();
-		train21 = new Train(false, largura, altura);
-		trainlist2.insFin(train11);
-		train22 = new Train(false, largura, altura);
-		trainlist2.insFin(train12);
-		train23 = new Train(false, largura, altura);
-		trainlist2.insFin(train13);
-		
-		// Criando instâncias de trem
-	/*	train1 = new Train(true, largura, altura);
-		train2 = new Train(false, largura, altura); */
+		trainlist1.insFin(new Train(true, largura, altura));
+		trainlist2.insFin(new Train(false, largura, altura));
 		
 		// Criando instâncias de sinais
 		traffic1 = new TrafficLight();
 		traffic2 = new TrafficLight(); 
 		
-		button1 = new JButton("printar posicao");
+		button1 = new JButton("Adicionar Trens");
 		button1.setLocation(270, largura/2);
 		button1.addActionListener(this);
 		this.add(button1);
@@ -87,20 +76,25 @@ public class PNRailroad extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
+				// Movo cada trem da lista de trens
+				Train train;
+				trainlist1.posIni();
+				
+				
+				for (train = (Train) trainlist1.prox(); train != null; train = (Train) trainlist1.prox()){
+					train.move();
+				}
+				
+				trainlist2.posIni();
+				
+				for (train = (Train) trainlist2.prox(); train != null; train = (Train) trainlist2.prox()){
+					train.move();
+				}
 				repaint();
-				train11.move();
-				train12.move();
-				train13.move();
-				train21.move();
-				train22.move();
-				train23.move();
 			}
 		});
 		timer.start();
-		
-		
-		
 	}
 	
 	public static PNRailroad getInstance(){
@@ -119,13 +113,26 @@ public class PNRailroad extends JPanel implements ActionListener {
 		s2 = new Rectangle2D.Double(980,400,30,50);
 		
 		g2d.setColor(Color.BLACK);
-		g2d.fillOval((int)(train11.getPositionX()), (int)(train11.getPositionY()), 15, 15);
-		g2d.fillOval((int)(train12.getPositionX()), (int)(train12.getPositionY()), 15, 15);
-		g2d.fillOval((int)(train13.getPositionX()), (int)(train13.getPositionY()), 15, 15);
+		
+		Train train;
+		trainlist1.posIni();
+		for (train = (Train) trainlist1.prox(); train != null; train = (Train) trainlist1.prox()){
+			g2d.fillOval((int)(train.getPositionX()), (int)(train.getPositionY()), 15, 15);
+		}
+		
 		g2d.setColor(Color.RED);
-		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
-		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
-		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
+		trainlist2.posIni();
+		
+		for (train = (Train) trainlist2.prox(); train != null; train = (Train) trainlist2.prox()){
+			g2d.fillOval((int)(train.getPositionX()), (int)(train.getPositionY()), 15, 15);
+		}
+//		g2d.fillOval((int)(train11.getPositionX()), (int)(train11.getPositionY()), 15, 15);
+//		g2d.fillOval((int)(train12.getPositionX()), (int)(train12.getPositionY()), 15, 15);
+//		g2d.fillOval((int)(train13.getPositionX()), (int)(train13.getPositionY()), 15, 15);
+		
+//		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
+//		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
+//		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
 		
 		g2d.setColor(Color.BLACK);
 		g2d.draw(s1);
@@ -138,8 +145,11 @@ public class PNRailroad extends JPanel implements ActionListener {
 	}
 
 	private void printPositions(){
-//		System.out.printf("train1: (%d, %d)\n", train1.getPositionX(), train1.getPositionY());
-//		System.out.printf("train2: (%d, %d)\n", train2.getPositionX(), train2.getPositionY());
+		
+		trainlist1.insFin(new Train(true, largura, altura));
+		trainlist2.insFin(new Train(false, largura, altura));
+		System.out.printf("train1: (%f, %f)\n", train11.getPositionX(), train11.getPositionY());
+		System.out.printf("train2: (%f, %f)\n", train21.getPositionX(), train21.getPositionY());
 	}
 	
 	public void mouseClicked(MouseEvent e) {

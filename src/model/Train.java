@@ -19,7 +19,7 @@ public class Train {
 		} else {
 			
 			positionX = largura - 10;
-			positionY = 370;
+			positionY = 373;
 		}
 	}
 	
@@ -62,33 +62,33 @@ public class Train {
 			// Antes da curva pro tunel
 			if (positionX <= 170) {
 				
-				positionX += 10;
+				positionX += 1;
 			}
 			
 			// Na curva para entrar no tunel
 			else if (positionX >= 170 && positionX <= 370) {
 				
-				positionX += 9;
-				positionY = (float) (0.208*positionX+243.822);
+				positionX += 1;
+				positionY = (float) (0.208*positionX+235);
 			}
 			
 			// Dentro do tunel
 			else if (positionX >= 370 && positionX <= 910) {
 				
-				positionX += 10;
+				positionX += 1;
 			}
 			
 			// Curva na saida do tunel
 			else if (positionX >= 910 && positionX <= 1100) {
 				
-				positionX += 9;
-				positionY = (float) (0.283*positionX+428.415);
+				positionX += 1;
+				positionY = (float) (-0.208*positionX+502);
 			}
 			
 			// Reta final
 			else {
 				
-				positionX += 10;
+				positionX += 1;
 			}
 			
 		} else {
@@ -96,33 +96,33 @@ public class Train {
 			// Antes da curva pro tunel
 			if (positionX >= 1100) {
 				
-				positionX -= 10;
+				positionX -= 1;
 			}
 			
 			// Na curva para entrar no tunel
 			else if (positionX <= 1100 && positionX >= 920) {
 				
-				positionX -= 9;
-				positionY = (float) (0.364*positionX-19.09);
+				positionX -= 1;
+				positionY = (float) (0.364*positionX-27);
 			}
 			
 			// Dentro do tunel
 			else if (positionX <= 920 && positionX >= 370) {
 				
-				positionX -= 10;
+				positionX -= 1;
 			}
 			
 			// Curva na saida do tunel
 			else if (positionX <= 370 && positionX >= 160) {
 				
-				positionX -= 8;
-				positionY = (float) (-0.204*positionX+507.614);
+				positionX -= 1;
+				positionY = (float) (-0.364*positionX+440);
 			}
 			
 			// Reta final
 			else {
 				
-				positionX -= 10;
+				positionX -= 1;
 			}
 		}
 	}

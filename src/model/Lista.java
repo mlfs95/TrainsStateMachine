@@ -91,5 +91,7 @@ public class Lista {
 		return o;
 	}	
 	
-
+	public int getTam(){
+		return tam;
+	}
 }
