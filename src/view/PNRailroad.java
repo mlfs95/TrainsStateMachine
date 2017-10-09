@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import model.Lista;
+import model.Sensor;
 import model.TrafficLight;
 import model.Train;
 
@@ -36,6 +37,7 @@ public class PNRailroad extends JPanel implements ActionListener {
 	private JButton button1;
 	private Lista trainlist1,trainlist2;
 	private int dist = 20;
+	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
 	
 	public PNRailroad(){
 		super();
@@ -65,6 +67,12 @@ public class PNRailroad extends JPanel implements ActionListener {
 		traffic1 = new TrafficLight();
 		traffic2 = new TrafficLight(); 
 		
+		//cria sensores
+		sensorin1 = new Sensor(165,270);
+		sensorin2 = new Sensor(1100,370);
+		sensorout1 = new Sensor(1100,270);
+		sensorout2 = new Sensor(165,370);
+		
 		button1 = new JButton("Adicionar Trens");
 		button1.setLocation(270, largura/2);
 		button1.addActionListener(this);
@@ -91,6 +99,20 @@ public class PNRailroad extends JPanel implements ActionListener {
 				for (train = (Train) trainlist2.prox(); train != null; train = (Train) trainlist2.prox()){
 					train.move();
 				}
+				
+				trainlist1.posIni();
+				Train t1 = (Train) trainlist1.prox();
+				
+				if(t1.getPositionX() >= sensorin1.get_x()){
+					traffic1.setIsGreen(false);
+				}
+				
+				trainlist2.posIni();
+				Train t2 = (Train) trainlist2.prox();
+				if(t2.getPositionX() <= sensorin2.get_x()){
+					traffic2.setIsGreen(false);
+				} 
+				
 				repaint();
 			}
 		});
@@ -113,7 +135,6 @@ public class PNRailroad extends JPanel implements ActionListener {
 		s2 = new Rectangle2D.Double(980,400,30,50);
 		
 		g2d.setColor(Color.BLACK);
-		
 		Train train;
 		trainlist1.posIni();
 		for (train = (Train) trainlist1.prox(); train != null; train = (Train) trainlist1.prox()){
@@ -137,6 +158,30 @@ public class PNRailroad extends JPanel implements ActionListener {
 		g2d.setColor(Color.BLACK);
 		g2d.draw(s1);
 		g2d.draw(s2);
+		
+		if(traffic1.getIsGreen()){
+			g2d.setColor(Color.GREEN);
+			g2d.fillOval(307, 210, 15, 15);
+		}
+		else{
+			g2d.setColor(Color.RED);
+			g2d.fillOval(307, 230, 15, 15); 
+		} 
+		
+		if(traffic2.getIsGreen()){
+			g2d.setColor(Color.GREEN);
+			g2d.fillOval(990, 410, 15, 15);
+		}
+		else{
+			g2d.setColor(Color.RED);
+			g2d.fillOval(990, 430, 15, 15);
+		} 
+		
+		g2d.setColor(Color.RED);
+		g2d.fillOval(sensorin1.get_x(),sensorin1.get_y(), 10, 10);
+		g2d.fillOval(sensorin2.get_x(),sensorin2.get_y(), 10, 10);
+		g2d.fillOval(sensorout1.get_x(),sensorout1.get_y(), 10, 10);
+		g2d.fillOval(sensorout2.get_x(),sensorout2.get_y(), 10, 10);
 	}
 	
 	@Override
