@@ -105,13 +105,13 @@ public class PNRailroad extends JPanel implements ActionListener {
 				Train t1 = (Train) trainlist1.prox();
 				
 				if(t1.getPositionX() >= sensorin1.get_x()){
-					traffic1.setIsGreen(false);
+					traffic1.setIsGreen(true);
 				}
 				
 				trainlist2.posIni();
 				Train t2 = (Train) trainlist2.prox();
 				if(t2.getPositionX() <= sensorin2.get_x()){
-					traffic2.setIsGreen(false);
+					traffic2.setIsGreen(true);
 				} 
 				
 				repaint();
@@ -194,8 +194,8 @@ public class PNRailroad extends JPanel implements ActionListener {
 		
 		trainlist1.insFin(new Train(true, largura, altura));
 		trainlist2.insFin(new Train(false, largura, altura));
-		System.out.printf("train1: (%f, %f)\n", train11.getPositionX(), train11.getPositionY());
-		System.out.printf("train2: (%f, %f)\n", train21.getPositionX(), train21.getPositionY());
+	//	System.out.printf("train1: (%f, %f)\n", train11.getPositionX(), train11.getPositionY());
+	//	System.out.printf("train2: (%f, %f)\n", train21.getPositionX(), train21.getPositionY());
 	}
 	
 	public void mouseClicked(MouseEvent e) {

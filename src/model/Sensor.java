@@ -3,7 +3,7 @@ package model;
 public class Sensor {
 	private int x;
 	private int y;
-	private int cont;
+	private int cont = 0;
 	
 	public Sensor(int x, int y){
 		this.x = x;

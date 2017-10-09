@@ -6,7 +6,7 @@ public class TrafficLight {
 	
 	public TrafficLight(){
 		
-		isGreen = true;
+		isGreen = false;
 	}
 	
 	public boolean getIsGreen() {
