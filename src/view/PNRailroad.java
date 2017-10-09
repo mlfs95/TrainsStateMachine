@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controller.TrainManager;
 import model.Lista;
 import model.TrafficLight;
 import model.Train;
@@ -26,6 +27,7 @@ public class PNRailroad extends JPanel implements ActionListener {
 	private static PNRailroad instance = null;
 	private Image i, i2;
 	private int speed = 33;
+	TrainManager trainManager = TrainManager.getInstance();
 	private Train train11,train12,train13;
 	private Train train21,train22,train23;
 	private Train[] rightTrains;
@@ -54,16 +56,19 @@ public class PNRailroad extends JPanel implements ActionListener {
 		
 		altura = (int) (i.getHeight(null)*0.8);
 		largura = (int) (i.getWidth(null)*0.8);
-		
-		//cria lista de trens
-		trainlist1 = new Lista();
-		trainlist2 = new Lista();
-		trainlist1.insFin(new Train(true, largura, altura));
-		trainlist2.insFin(new Train(false, largura, altura));
+//		
+//		//cria lista de trens
+//		trainlist1 = new Lista();
+//		trainlist2 = new Lista();
+//		trainlist1.insFin(new Train(true, largura, altura));
+//		trainlist2.insFin(new Train(false, largura, altura));
 		
 		// Criando instâncias de sinais
-		traffic1 = new TrafficLight();
-		traffic2 = new TrafficLight(); 
+//		traffic1 = new TrafficLight();
+//		traffic2 = new TrafficLight(); 
+		
+		trainManager.addTrainLeft(largura, altura);
+		trainManager.addTrainRight(largura, altura);
 		
 		button1 = new JButton("Adicionar Trens");
 		button1.setLocation(270, largura/2);
@@ -76,21 +81,9 @@ public class PNRailroad extends JPanel implements ActionListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				trainManager.moveTrains();
 				
-				// Movo cada trem da lista de trens
-				Train train;
-				trainlist1.posIni();
-				
-				
-				for (train = (Train) trainlist1.prox(); train != null; train = (Train) trainlist1.prox()){
-					train.move();
-				}
-				
-				trainlist2.posIni();
-				
-				for (train = (Train) trainlist2.prox(); train != null; train = (Train) trainlist2.prox()){
-					train.move();
-				}
 				repaint();
 			}
 		});
@@ -115,24 +108,20 @@ public class PNRailroad extends JPanel implements ActionListener {
 		g2d.setColor(Color.BLACK);
 		
 		Train train;
-		trainlist1.posIni();
-		for (train = (Train) trainlist1.prox(); train != null; train = (Train) trainlist1.prox()){
+		Lista trains = trainManager.getTrainsLeft();
+		trains.posIni();
+		
+		for (train = (Train) trains.prox(); train != null; train = (Train) trains.prox()){
 			g2d.fillOval((int)(train.getPositionX()), (int)(train.getPositionY()), 15, 15);
 		}
 		
 		g2d.setColor(Color.RED);
-		trainlist2.posIni();
+		trains = trainManager.getTrainsRight();
+		trains.posIni();
 		
-		for (train = (Train) trainlist2.prox(); train != null; train = (Train) trainlist2.prox()){
+		for (train = (Train) trains.prox(); train != null; train = (Train) trains.prox()){
 			g2d.fillOval((int)(train.getPositionX()), (int)(train.getPositionY()), 15, 15);
 		}
-//		g2d.fillOval((int)(train11.getPositionX()), (int)(train11.getPositionY()), 15, 15);
-//		g2d.fillOval((int)(train12.getPositionX()), (int)(train12.getPositionY()), 15, 15);
-//		g2d.fillOval((int)(train13.getPositionX()), (int)(train13.getPositionY()), 15, 15);
-		
-//		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
-//		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
-//		g2d.fillOval((int)(train21.getPositionX()), (int)(train21.getPositionY()), 15, 15);
 		
 		g2d.setColor(Color.BLACK);
 		g2d.draw(s1);
@@ -146,10 +135,8 @@ public class PNRailroad extends JPanel implements ActionListener {
 
 	private void printPositions(){
 		
-		trainlist1.insFin(new Train(true, largura, altura));
-		trainlist2.insFin(new Train(false, largura, altura));
-		System.out.printf("train1: (%f, %f)\n", train11.getPositionX(), train11.getPositionY());
-		System.out.printf("train2: (%f, %f)\n", train21.getPositionX(), train21.getPositionY());
+		trainManager.addTrainLeft(largura, altura);
+		trainManager.addTrainRight(largura, altura);
 	}
 	
 	public void mouseClicked(MouseEvent e) {
