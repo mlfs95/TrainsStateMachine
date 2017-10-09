@@ -69,6 +69,14 @@ public class TrainManager {
 	public void addTrainRight(int largura, int altura) {
 		trainsRight.insFin(new Train(false, largura, altura));
 	}
+	
+	public TrafficLight getTrafficLeft() {
+		return trafficLeft;
+	}
+	
+	public TrafficLight getTrafficRight() {
+		return trafficRight;
+	}
 }
 
 

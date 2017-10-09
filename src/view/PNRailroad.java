@@ -169,7 +169,9 @@ public class PNRailroad extends JPanel implements ActionListener {
 		g2d.draw(s1);
 		g2d.draw(s2);
 		
-		if(traffic1.getIsGreen()){
+		trainManager.getTrafficLeft().setIsGreen(true);
+		
+		if(trainManager.getTrafficLeft().getIsGreen()){
 			g2d.setColor(Color.GREEN);
 			g2d.fillOval(307, 210, 15, 15);
 		}
@@ -178,7 +180,7 @@ public class PNRailroad extends JPanel implements ActionListener {
 			g2d.fillOval(307, 230, 15, 15); 
 		} 
 		
-		if(traffic2.getIsGreen()){
+		if(trainManager.getTrafficRight().getIsGreen()){
 			g2d.setColor(Color.GREEN);
 			g2d.fillOval(990, 410, 15, 15);
 		}
