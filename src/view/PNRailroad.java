@@ -79,6 +79,12 @@ public class PNRailroad extends JPanel implements ActionListener {
 		sensorout1 = new Sensor(1100,270);
 		sensorout2 = new Sensor(165,370);
 		
+		//cria sensores
+		sensorin1 = new Sensor(165,270);
+		sensorin2 = new Sensor(1100,370);
+		sensorout1 = new Sensor(1100,270);
+		sensorout2 = new Sensor(165,370);
+		
 		button1 = new JButton("Adicionar Trens");
 		button1.setLocation(270, largura/2);
 		button1.addActionListener(this);
