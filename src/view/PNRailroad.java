@@ -38,6 +38,7 @@ public class PNRailroad extends JPanel implements ActionListener {
 	private Lista trainlist1,trainlist2;
 	private int dist = 20;
 	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
+	private int cont;
 	
 	public PNRailroad(){
 		super();
