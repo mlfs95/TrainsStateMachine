@@ -6,12 +6,10 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.InputStream;
 //import java.util.Timer;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -29,15 +27,8 @@ public class PNRailroad extends JPanel implements ActionListener {
 	private Image i, i2;
 	private int speed = 33;
 	TrainManager trainManager = TrainManager.getInstance();
-	private Train train11,train12,train13;
-	private Train train21,train22,train23;
-	private Train[] rightTrains;
-	private Train[] leftTrains;
 	private int altura, largura;
-	private TrafficLight traffic1;
-	private TrafficLight traffic2;
 	private JButton button1;
-	private Lista trainlist1,trainlist2;
 	private int dist = 20;
 	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
 	private int cont;
@@ -59,25 +50,9 @@ public class PNRailroad extends JPanel implements ActionListener {
 		
 		altura = (int) (i.getHeight(null)*0.8);
 		largura = (int) (i.getWidth(null)*0.8);
-//		
-//		//cria lista de trens
-//		trainlist1 = new Lista();
-//		trainlist2 = new Lista();
-//		trainlist1.insFin(new Train(true, largura, altura));
-//		trainlist2.insFin(new Train(false, largura, altura));
-		
-		// Criando instâncias de sinais
-//		traffic1 = new TrafficLight();
-//		traffic2 = new TrafficLight(); 
 		
 		trainManager.addTrainLeft(largura, altura);
 		trainManager.addTrainRight(largura, altura);
-		
-		//cria sensores
-		sensorin1 = new Sensor(165,270);
-		sensorin2 = new Sensor(1100,370);
-		sensorout1 = new Sensor(1100,270);
-		sensorout2 = new Sensor(165,370);
 		
 		//cria sensores
 		sensorin1 = new Sensor(165,270);
@@ -98,34 +73,6 @@ public class PNRailroad extends JPanel implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				trainManager.moveTrains();
-				// Movo cada trem da lista de trens
-
-//				Train train;
-//				trainlist1.posIni();
-//				
-//				
-//				for (train = (Train) trainlist1.prox(); train != null; train = (Train) trainlist1.prox()){
-//					train.move();
-//				}
-//				
-//				trainlist2.posIni();
-//				
-//				for (train = (Train) trainlist2.prox(); train != null; train = (Train) trainlist2.prox()){
-//					train.move();
-//				}
-//				
-//				trainlist1.posIni();
-//				Train t1 = (Train) trainlist1.prox();
-//				
-//				if(t1.getPositionX() >= sensorin1.get_x()){
-//					traffic1.setIsGreen(false);
-//				}
-//				
-//				trainlist2.posIni();
-//				Train t2 = (Train) trainlist2.prox();
-//				if(t2.getPositionX() <= sensorin2.get_x()){
-//					traffic2.setIsGreen(false);
-//				} 
 				
 				repaint();
 			}
