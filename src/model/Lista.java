@@ -94,4 +94,12 @@ public class Lista {
 	public int getTam(){
 		return tam;
 	}
+	
+	public No getCorr(){
+		return corr;
+	}
+	
+	public void setCorr(No corr){
+		this.corr = corr;
+	}
 }

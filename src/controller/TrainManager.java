@@ -1,8 +1,10 @@
 package controller;
 
 import model.Lista;
+import model.No;
 import model.TrafficLight;
 import model.Train;
+import model.Train.speed;
 
 public class TrainManager {
 
@@ -48,7 +50,27 @@ public class TrainManager {
 			// Caso o semaforo esteja vermelho ele para
 			if ((int)(train.getPositionX()) == 174 && !trafficLeft.getIsGreen()){  }
 			
-			else { train.move(); }
+			else { 
+				
+				No corr = trainsLeft.getCorr();
+				trainsLeft.posIni();
+				Train trainNext;
+				boolean willHit = false;
+				
+				for (trainNext = (Train) trainsLeft.prox(); trainNext!=null; trainNext = (Train) trainsLeft.prox()){
+					
+					if (train.getPositionX() >= trainNext.getPositionX()-126 && train.getPositionX() < trainNext.getPositionX()){
+						willHit = true;
+					}
+				}
+				
+				trainsLeft.setCorr(corr);
+				if (!willHit){
+					train.move();
+				}
+				
+				
+			}
 			
 		}
 		
@@ -58,16 +80,35 @@ public class TrainManager {
 			
 			if ((int)(train.getPositionX()) == 1105 && !trafficRight.getIsGreen()){  }
 			
-			else { train.move(); }
+			else { 
+
+				No corr = trainsRight.getCorr();
+				trainsRight.posIni();
+				Train trainNext;
+				boolean willHit = false;
+				
+				for (trainNext = (Train) trainsRight.prox(); trainNext!=null; trainNext = (Train) trainsRight.prox()){
+					
+					if (train.getPositionX() <= trainNext.getPositionX()+126 && train.getPositionX() > trainNext.getPositionX()){
+						willHit = true;
+					}
+				}
+				
+				trainsRight.setCorr(corr);
+				if (!willHit){
+					train.move();
+				
+				}
+			}
 		}
 	}
 	
 	public void addTrainLeft(int largura, int altura) {
-		trainsLeft.insFin(new Train(true, largura, altura));
+		trainsLeft.insFin(new Train(true, largura, altura, speed.FAST));
 	}
 	
 	public void addTrainRight(int largura, int altura) {
-		trainsRight.insFin(new Train(false, largura, altura));
+		trainsRight.insFin(new Train(false, largura, altura, speed.FAST));
 	}
 	
 	public TrafficLight getTrafficLeft() {

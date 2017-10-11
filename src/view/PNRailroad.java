@@ -31,7 +31,6 @@ public class PNRailroad extends JPanel implements ActionListener {
 	private JButton button1;
 	private int dist = 20;
 	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
-	private int cont;
 	
 	public PNRailroad(){
 		super();
@@ -136,7 +135,7 @@ public class PNRailroad extends JPanel implements ActionListener {
 			g2d.fillOval(990, 430, 15, 15);
 		} 
 		
-		g2d.setColor(Color.RED);
+		g2d.setColor(Color.gray);
 		g2d.fillOval(sensorin1.get_x(),sensorin1.get_y(), 10, 10);
 		g2d.fillOval(sensorin2.get_x(),sensorin2.get_y(), 10, 10);
 		g2d.fillOval(sensorout1.get_x(),sensorout1.get_y(), 10, 10);
