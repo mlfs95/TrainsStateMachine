@@ -80,6 +80,11 @@ public class Lista {
 	{
 		corr=ini;
 	}
+	
+	public void posFin()
+	{
+		corr = fin;
+	}
 		
 	public Object prox()
 	{

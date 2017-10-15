@@ -3,10 +3,13 @@ import view.FRRailroad;
 
 public class Main {
 
-	public static void main(String[] args) {
-		FRRailroad f = FRRailroad.getInstance();
-		f.setSize(1280, 670);
-		f.setVisible(true);
+	public static void main(String[] args) {	
+		Facade f = Facade.getInstance();
+		f.startFRRailroad();
+		f.startTrainManager();
+		f.startTrafficManager();
+		
+		
 	}
 
 }

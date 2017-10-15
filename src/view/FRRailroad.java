@@ -4,15 +4,19 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
+import controller.Facade;
+import controller.TrafficManager;
+
 public class FRRailroad extends JFrame implements MouseListener {
 	private static FRRailroad instance = null;
 	
-	
 	public FRRailroad(String s){
 		super(s);
+		
 		PNRailroad p = PNRailroad.getInstance(); 
 		getContentPane().add(p);
 		getContentPane().addMouseListener(this);
+		p.addObserver(TrafficManager.getInstance());
 	}
 	
 	public static FRRailroad getInstance(){
@@ -23,8 +27,8 @@ public class FRRailroad extends JFrame implements MouseListener {
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-	    System.out.println(e.getX()+","+e.getY());
-	}
+	  //  System.out.println(e.getX()+","+e.getY());
+	} 
 	
 	public void mousePressed(MouseEvent e) { }
 

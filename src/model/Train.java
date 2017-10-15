@@ -20,8 +20,8 @@ public class Train {
 		switch (speed) {
 		
 			case FAST:
-				System.out.println("is really fast");
-				velocity = (float) 1.1;
+				System.out.println("it is really fast");
+				velocity = (float) 1.1; //1.1
 				break;
 			case MEDIUM:
 				velocity = (float) 0.92;
