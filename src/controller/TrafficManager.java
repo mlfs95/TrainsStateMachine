@@ -16,8 +16,8 @@ public class TrafficManager implements model.Observer {
 	       
 	        trafficLeft = new TrafficLight();
 	        trafficRight = new TrafficLight();
-	        trafficRight.setIsGreen(true);
-	        trafficLeft.setIsGreen(false);
+	        trafficRight.setIsGreen(false);
+	        trafficLeft.setIsGreen(true);
 	       
 	    }
 	   

@@ -32,7 +32,7 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 	TrainManager trainManager = TrainManager.getInstance();
 	TrafficManager trafficManager = TrafficManager.getInstance();
 	private int altura, largura;
-	private JButton button1;
+	private JButton button1, button2;
 	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
 	private List<Observer> observers = new ArrayList <Observer>();
 	
@@ -63,10 +63,15 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		sensorout1 = new Sensor(1100,270);
 		sensorout2 = new Sensor(165,370);
 		
-		button1 = new JButton("Adicionar Trens");
+		button1 = new JButton("Adicionar trens a esquerda");
 		button1.setLocation(270, largura/2);
 		button1.addActionListener(this);
 		this.add(button1);
+		
+		button2 = new JButton("Adicionar trens a direita");
+		button2.setLocation(300, largura/2);
+		button2.addActionListener(this);
+		this.add(button2);
 		
 		i2 = i.getScaledInstance(largura, altura, 100 );
 		
@@ -172,14 +177,25 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		printPositions();
+		
+		if(e.getSource() == button1){
+			printPositionsLeft();
+		}
+		else if(e.getSource() == button2){
+			printPositionsRight();
+		}
 	}
 
-	private void printPositions(){
+	private void printPositionsLeft(){
 		
 		trainManager.addTrainLeft(largura, altura);
+		//trainManager.addTrainRight(largura, altura);
+	}
+	
+	private void printPositionsRight(){
 		trainManager.addTrainRight(largura, altura);
 	}
+	
 	
 	public void mouseClicked(MouseEvent e) {
 	    int x=e.getX();
