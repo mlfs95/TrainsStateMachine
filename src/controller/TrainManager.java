@@ -1,15 +1,25 @@
 package controller;
 
+import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.Timer;
+
 import model.Lista;
 import model.No;
+import model.Observer;
 import model.Sensor;
 import model.TrafficLight;
 import model.Train;
 import model.Train.speed;
 import view.PNRailroad;
 
-public class TrainManager {
+public class TrainManager implements model.Observable {
 
+	private Observer observer;
+	private ArrayList<Observer> observerList = new ArrayList<Observer>();
 	private static TrainManager instance = null;
 	private Lista trainsLeft;
 	private Lista trainsRight;
@@ -20,10 +30,27 @@ public class TrainManager {
 	private boolean checkLeft = false;
 	private boolean checkRight = false;
 	
+	private int timerSpeed = 33;
+	
 	public TrainManager(){
 		
 		trainsRight = new Lista();
 		trainsLeft = new Lista();
+		
+		Timer timer = new Timer(timerSpeed, new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				moveTrains();
+				
+				// notificar observer
+				observer.update();
+				
+				
+			}
+		});
+		timer.start();
 	}
 	
 	public static TrainManager getInstance(){
@@ -86,7 +113,6 @@ public class TrainManager {
 			
 			else {
 				
-				
 				No corr = trainsLeft.getCorr();
 				trainsLeft.posIni();
 				Train trainNext;
@@ -102,10 +128,7 @@ public class TrainManager {
 				if (!willHit){
 					train.move();
 				}
-				
-				
 			}
-			
 		}
 		
 		trainsRight.posIni();
@@ -150,6 +173,24 @@ public class TrainManager {
 		
 	public void addTrainRight(int largura, int altura) {
 		trainsRight.insFin(new Train(false, largura, altura, speed.FAST));
+	}
+
+	@Override
+	public void addObserver(Observer o) {
+		// TODO Auto-generated method stub
+		observer = o;
+	}
+
+	@Override
+	public void removeObserver(Observer o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyObserver(Observer o) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

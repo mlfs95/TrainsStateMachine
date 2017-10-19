@@ -25,10 +25,9 @@ import model.Observer;
 import model.Sensor;
 import model.Train;
 
-public class PNRailroad extends JPanel implements ActionListener, model.Observable {
+public class PNRailroad extends JPanel implements ActionListener, model.Observable, model.Observer {
 	private static PNRailroad instance = null;
 	private Image i, i2;
-	private int speed = 33;
 	TrainManager trainManager = TrainManager.getInstance();
 	TrafficManager trafficManager = TrafficManager.getInstance();
 	private int altura, largura;
@@ -38,6 +37,8 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 	
 	public PNRailroad(){
 		super();
+		
+		TrainManager.getInstance().addObserver(this);
 		
 		try
 		{
@@ -74,27 +75,6 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		this.add(button2);
 		
 		i2 = i.getScaledInstance(largura, altura, 100 );
-		
-		Timer timer = new Timer(speed, new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				trainManager.moveTrains();
-				
-				if(trainManager.getcheckLeft()){
-					notifyObserver(trafficManager);
-					trainManager.setcheckLeft(false);
-				}
-				if(trainManager.getcheckRight()){
-					notifyObserver(trafficManager);
-					trainManager.setcheckRight(false);
-				}
-				
-				repaint();
-			}
-		});
-		timer.start();
 	}
 	
 	public static PNRailroad getInstance(){
@@ -226,5 +206,17 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 				p.update();
 			}
 		}
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		repaint();
+	}
+
+	@Override
+	public void update(java.util.Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

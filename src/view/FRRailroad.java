@@ -16,7 +16,7 @@ public class FRRailroad extends JFrame implements MouseListener {
 		PNRailroad p = PNRailroad.getInstance(); 
 		getContentPane().add(p);
 		getContentPane().addMouseListener(this);
-		p.addObserver(TrafficManager.getInstance());
+//		p.addObserver(TrafficManager.getInstance());
 	}
 	
 	public static FRRailroad getInstance(){
