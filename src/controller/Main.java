@@ -8,7 +8,7 @@ public class Main {
 		f.startFRRailroad();
 		f.startTrainManager();
 		f.startTrafficManager();
-		
+		f.startFRTrainAdd();
 		
 	}
 
