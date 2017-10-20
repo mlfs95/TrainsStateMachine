@@ -24,8 +24,6 @@ public class FRTrainAdd extends JFrame implements ActionListener {
 		b2 = new JButton("adicionar trens a direita");
 		b1.setBounds(20, 20, 200, 30);
 		b2.setBounds(350, 20, 200, 30);
-		b1.addActionListener(this);
-		b2.addActionListener(this);
 		
 		be1 = new JButton("60 Km/h");
 		be2 = new JButton("80 Km/h");
@@ -57,6 +55,15 @@ public class FRTrainAdd extends JFrame implements ActionListener {
 		screen.add(bd1);
 		screen.add(bd2);
 		screen.add(bd3);
+		
+		b1.addActionListener(this);
+		b2.addActionListener(this);
+		be1.addActionListener(this);
+		be2.addActionListener(this);
+		bd1.addActionListener(this);
+		bd2.addActionListener(this);
+		bd3.addActionListener(this);
+		be3.addActionListener(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
