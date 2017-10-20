@@ -25,20 +25,16 @@ import model.Observer;
 import model.Sensor;
 import model.Train;
 
-public class PNRailroad extends JPanel implements ActionListener, model.Observable, model.Observer {
+public class PNRailroad extends JPanel implements ActionListener, model.Observer {
 	private static PNRailroad instance = null;
 	private Image i, i2;
 	TrainManager trainManager = TrainManager.getInstance();
 	TrafficManager trafficManager = TrafficManager.getInstance();
 	private int altura, largura;
 	private JButton button1, button2;
-	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
-	private List<Observer> observers = new ArrayList <Observer>();
 	
 	public PNRailroad(){
 		super();
-		
-		TrainManager.getInstance().addObserver(this);
 		
 		try
 		{
@@ -54,15 +50,6 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		
 		altura = (int) (i.getHeight(null)*0.8);
 		largura = (int) (i.getWidth(null)*0.8);
-		
-	//	trainManager.addTrainLeft(largura, altura);
-	//	trainManager.addTrainRight(largura, altura);
-		
-		//cria sensores
-		sensorin1 = new Sensor(165,270);
-		sensorin2 = new Sensor(1100,370);
-		sensorout1 = new Sensor(1100,270);
-		sensorout2 = new Sensor(165,370);
 		
 		button1 = new JButton("Adicionar trens a esquerda");
 		button1.setLocation(270, largura/2);
@@ -84,24 +71,10 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		return instance;
 	}
 	
-	public Sensor getSensorin1(){
-		return sensorin1;
-	}
-	
-	public Sensor getSensorout1(){
-		return sensorout1;
-	}
-	
-	public Sensor getSensorin2(){
-		return sensorin2;
-	}
-	
-	public Sensor getSensorout2(){
-		return sensorout2;
-	}
-	
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
+		
+		// Prepara para desenhar
 		g.drawImage(i2, 0, 0, null);
 		Graphics2D g2d  = (Graphics2D) g;
 		Rectangle2D s1,s2;
@@ -113,6 +86,7 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		Lista trains = trainManager.getTrainsLeft();
 		trains.posIni();
 		
+		// desenha todos os trens da esquerda
 		for (train = (Train) trains.prox(); train != null; train = (Train) trains.prox()){
 			g2d.fillOval((int)(train.getPositionX()), (int)(train.getPositionY()), 15, 15);
 		}
@@ -121,6 +95,7 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		trains = trainManager.getTrainsRight();
 		trains.posIni();
 		
+		// desenha todos os trens da direita
 		for (train = (Train) trains.prox(); train != null; train = (Train) trains.prox()){
 			g2d.fillOval((int)(train.getPositionX()), (int)(train.getPositionY()), 15, 15);
 		}
@@ -129,8 +104,8 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 		g2d.draw(s1);
 		g2d.draw(s2);
 		
-		
-		if(trafficManager.getTrafficLeft().getIsGreen()){
+		// Desenha as luzes dos sinais
+		if(TrainManager.getInstance().getTrafficLeft().getIsGreen()){
 			g2d.setColor(Color.GREEN);
 			g2d.fillOval(307, 210, 15, 15);
 		}
@@ -139,7 +114,7 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 			g2d.fillOval(307, 230, 15, 15); 
 		} 
 		
-		if(trafficManager.getTrafficRight().getIsGreen()){
+		if(TrainManager.getInstance().getTrafficRight().getIsGreen()){
 			g2d.setColor(Color.GREEN);
 			g2d.fillOval(990, 410, 15, 15);
 		}
@@ -148,11 +123,12 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 			g2d.fillOval(990, 430, 15, 15);
 		} 
 		
+		// Desenha sensores
 		g2d.setColor(Color.blue);
-		g2d.fillOval(sensorin1.get_x(),sensorin1.get_y(), 10, 10);
-		g2d.fillOval(sensorin2.get_x(),sensorin2.get_y(), 10, 10);
-		g2d.fillOval(sensorout1.get_x(),sensorout1.get_y(), 10, 10);
-		g2d.fillOval(sensorout2.get_x(),sensorout2.get_y(), 10, 10);
+		g2d.fillOval(TrainManager.getInstance().getSensorin1().get_x(), TrainManager.getInstance().getSensorin1().get_y(), 10, 10);
+		g2d.fillOval(TrainManager.getInstance().getSensorin2().get_x(), TrainManager.getInstance().getSensorin2().get_y(), 10, 10);
+		g2d.fillOval(TrainManager.getInstance().getSensorout1().get_x(), TrainManager.getInstance().getSensorout1().get_y(), 10, 10);
+		g2d.fillOval(TrainManager.getInstance().getSensorout2().get_x(), TrainManager.getInstance().getSensorout2().get_y(), 10, 10);
 	}
 	
 	@Override
@@ -178,45 +154,16 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observab
 	
 	
 	public void mouseClicked(MouseEvent e) {
-	    int x=e.getX();
-	    int y=e.getY();
+//	    int x=e.getX();
+//	    int y=e.getY();
 //	    System.out.println(x+","+y);//these co-ords are relative to the component
 	}
 
 	@Override
-	public void addObserver(Observer o) {
-		observers.add(o);
-		
-	}
-
-	@Override
-	public void removeObserver(Observer o) {
-		int i = observers.indexOf(o);
-		
-		if(i > -1){
-			observers.remove(o);
-		}
-		
-	}
-
-	@Override
-	public void notifyObserver(Observer o) {
-		for(Observer p:observers){
-			if(p == o){
-				p.update();
-			}
-		}
-	}
-
-	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 		repaint();
 	}
 
 	@Override
-	public void update(java.util.Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void update(java.util.Observable o, Object arg) { }
 }

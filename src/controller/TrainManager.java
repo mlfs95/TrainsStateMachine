@@ -4,6 +4,7 @@ import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import javax.swing.Timer;
 
@@ -16,15 +17,14 @@ import model.Train;
 import model.Train.speed;
 import view.PNRailroad;
 
-public class TrainManager implements model.Observable {
+public class TrainManager {
 
-	private Observer observer;
-	private ArrayList<Observer> observerList = new ArrayList<Observer>();
 	private static TrainManager instance = null;
 	private Lista trainsLeft;
 	private Lista trainsRight;
-	private TrafficLight trafficLeft = TrafficManager.getInstance().getTrafficLeft();
-	private TrafficLight trafficRight = TrafficManager.getInstance().getTrafficRight();
+	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
+	private TrafficLight trafficLeft;
+	private TrafficLight trafficRight;
 	private int qtdtrainsRight = 0;
 	private int qtdtrainsLeft = 0;
 	private boolean checkLeft = false;
@@ -37,17 +37,27 @@ public class TrainManager implements model.Observable {
 		trainsRight = new Lista();
 		trainsLeft = new Lista();
 		
+	    //cria sensores
+		sensorin1 = new Sensor(165,270);
+		sensorin2 = new Sensor(1100,370);
+		sensorout1 = new Sensor(1100,270);
+		sensorout2 = new Sensor(165,370);
+		
+		// Cria os sinais
+        trafficLeft = new TrafficLight();
+        trafficRight = new TrafficLight();
+        trafficRight.setIsGreen(false);
+        trafficLeft.setIsGreen(true);
+        
+		
 		Timer timer = new Timer(timerSpeed, new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				System.out.println("qtdTrainsLeft: " + qtdtrainsLeft);
+				System.out.println("qtdTrainsRight: " + qtdtrainsRight);
 				moveTrains();
-				
-				// notificar observer
-				observer.update();
-				
-				
 			}
 		});
 		timer.start();
@@ -58,6 +68,127 @@ public class TrainManager implements model.Observable {
 			instance = new TrainManager();
 		}
 		return instance;
+	}
+	
+
+	public void moveTrains() {
+		
+		trainsLeft.posIni();
+		Train train;
+		
+		// Pra cada trem
+		for (train = (Train) trainsLeft.prox(); train != null; train = (Train) trainsLeft.prox()){
+			
+			if((int)(train.getPositionX()) >= sensorin1.get_x()+5 && !train.getIsPassedTheSensorIn()){
+				train.passedTheSensorIn();
+				qtdtrainsLeft++;
+			}
+			
+			if((int)(train.getPositionX()) >= sensorout1.get_x() && !train.getIsPassedTheSensorOut()){
+				train.passedTheSensorOut();
+				qtdtrainsLeft--;
+			}
+			
+			// Caso o semaforo esteja vermelho ele para
+			if ((int)(train.getPositionX()) >= sensorin1.get_x() && !trafficLeft.getIsGreen() && (int)(train.getPositionX()) <= sensorout1.get_x()){  }
+			
+			else {
+				
+				No corr = trainsLeft.getCorr();
+				trainsLeft.posIni();
+				Train trainNext;
+				boolean willHit = false;
+				
+				for (trainNext = (Train) trainsLeft.prox(); trainNext!=null; trainNext = (Train) trainsLeft.prox()){
+					if (train.getPositionX() >= trainNext.getPositionX()-126 && train.getPositionX() < trainNext.getPositionX()){
+						willHit = true;
+					}
+				}
+				
+				trainsLeft.setCorr(corr);
+				if (!willHit){
+					train.move();
+				}
+			}
+		}
+		
+		trainsRight.posIni();
+		
+		for (train = (Train) trainsRight.prox(); train != null; train = (Train) trainsRight.prox()){
+			
+			if((int)(train.getPositionX()) <= sensorin2.get_x()-5 && !train.getIsPassedTheSensorIn()){
+				train.passedTheSensorIn();
+				qtdtrainsRight++;
+			}
+			
+			if((int)(train.getPositionX()) <= sensorout2.get_x() && !train.getIsPassedTheSensorOut()){
+				train.passedTheSensorOut();
+				qtdtrainsRight--;
+			}
+			
+			if ((int)(train.getPositionX()) <= sensorin2.get_x() && !trafficRight.getIsGreen() && (int)(train.getPositionX()) >= sensorout2.get_x()){  }
+			
+			else { 
+
+				No corr = trainsRight.getCorr();
+				trainsRight.posIni();
+				Train trainNext;
+				boolean willHit = false;
+				
+				for (trainNext = (Train) trainsRight.prox(); trainNext!=null; trainNext = (Train) trainsRight.prox()){
+					
+					if (train.getPositionX() <= trainNext.getPositionX()+126 && train.getPositionX() > trainNext.getPositionX()){
+						willHit = true;
+					}
+				}
+				
+				trainsRight.setCorr(corr);
+				if (!willHit){
+					train.move();
+				
+				}
+			}
+		}
+		
+		if(qtdtrainsLeft == 0) {
+			trafficRight.setIsGreen(true);
+		} else {
+			trafficRight.setIsGreen(false);
+		}
+		
+		if(qtdtrainsRight == 0) {
+			trafficLeft.setIsGreen(true);
+		} else {
+			trafficLeft.setIsGreen(false);
+		}
+	}
+	
+	public void addTrainLeft(int largura, int altura) {
+		Train train = new Train(true, largura, altura, speed.FAST);
+		train.addObserver(PNRailroad.getInstance());
+		trainsLeft.insFin(train);
+	}
+		
+	public void addTrainRight(int largura, int altura) {
+		Train train = new Train(false, largura, altura, speed.FAST);
+		train.addObserver(PNRailroad.getInstance());
+		trainsRight.insFin(train);
+	}
+
+	public Sensor getSensorin1(){
+		return sensorin1;
+	}
+	
+	public Sensor getSensorout1(){
+		return sensorout1;
+	}
+	
+	public Sensor getSensorin2(){
+		return sensorin2;
+	}
+	
+	public Sensor getSensorout2(){
+		return sensorout2;
 	}
 	
 	public Lista getTrainsLeft() {
@@ -91,108 +222,14 @@ public class TrainManager implements model.Observable {
 	public void setcheckRight(boolean check){
 		 this.checkRight = check;
 	}
-	
-	public void moveTrains() {
-		
-		trainsLeft.posIni();
-		Train train;
-		
-		for (train = (Train) trainsLeft.prox(); train != null; train = (Train) trainsLeft.prox()){
-			
-			if((int)(train.getPositionX()) >= PNRailroad.getInstance().getSensorout1().get_x()){
-				qtdtrainsLeft++;
-				if(qtdtrainsLeft == trainsLeft.getTam()){
-					checkLeft = true;
-				}
-			}
-			
-			// Cuidado na hora dessa conversao pois podemos desligar o semaforo e ficar presos por estarmos convertendo float pra int
-			
-			// Caso o semaforo esteja vermelho ele para
-			if ((int)(train.getPositionX()) >= PNRailroad.getInstance().getSensorin1().get_x() && !trafficLeft.getIsGreen() && qtdtrainsLeft == 0){  }
-			
-			else {
-				
-				No corr = trainsLeft.getCorr();
-				trainsLeft.posIni();
-				Train trainNext;
-				boolean willHit = false;
-				
-				for (trainNext = (Train) trainsLeft.prox(); trainNext!=null; trainNext = (Train) trainsLeft.prox()){
-					if (train.getPositionX() >= trainNext.getPositionX()-126 && train.getPositionX() < trainNext.getPositionX()){
-						willHit = true;
-					}
-				}
-				
-				trainsLeft.setCorr(corr);
-				if (!willHit){
-					train.move();
-				}
-			}
-		}
-		
-		trainsRight.posIni();
-		
-		for (train = (Train) trainsRight.prox(); train != null; train = (Train) trainsRight.prox()){
-			
-			if((int)(train.getPositionX()) <= PNRailroad.getInstance().getSensorout2().get_x()){
-				qtdtrainsRight++;
-				if(qtdtrainsRight == trainsRight.getTam()){
-					checkRight = true;
-				}
-			}
-			
-			if ((int)(train.getPositionX()) <= PNRailroad.getInstance().getSensorin2().get_x() && !trafficRight.getIsGreen() && qtdtrainsRight == 0){  }
-			
-			else { 
 
-				No corr = trainsRight.getCorr();
-				trainsRight.posIni();
-				Train trainNext;
-				boolean willHit = false;
-				
-				for (trainNext = (Train) trainsRight.prox(); trainNext!=null; trainNext = (Train) trainsRight.prox()){
-					
-					if (train.getPositionX() <= trainNext.getPositionX()+126 && train.getPositionX() > trainNext.getPositionX()){
-						willHit = true;
-					}
-				}
-				
-				trainsRight.setCorr(corr);
-				if (!willHit){
-					train.move();
-				
-				}
-			}
-		}
+    public TrafficLight getTrafficLeft() {
+		return trafficLeft;
 	}
 	
-	public void addTrainLeft(int largura, int altura) {
-		trainsLeft.insFin(new Train(true, largura, altura, speed.FAST));
+	public TrafficLight getTrafficRight() {
+		return trafficRight;
 	}
-		
-	public void addTrainRight(int largura, int altura) {
-		trainsRight.insFin(new Train(false, largura, altura, speed.FAST));
-	}
-
-	@Override
-	public void addObserver(Observer o) {
-		// TODO Auto-generated method stub
-		observer = o;
-	}
-
-	@Override
-	public void removeObserver(Observer o) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyObserver(Observer o) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
 
 

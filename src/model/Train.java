@@ -1,9 +1,16 @@
 package model;
 
-public class Train {
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
+public class Train implements model.Observable {
+
+	private ArrayList<Observer> lst = new ArrayList<Observer>();
 	private float positionX;
 	private float positionY;
+	private boolean isPassedTheSensorIn = false;
+	private boolean isPassedTheSensorOut = false;
 	private boolean isGoingRight;
 	private boolean isMoving;
 	private float velocity;
@@ -58,6 +65,14 @@ public class Train {
 		return isGoingRight;
 	}
 	
+	public boolean getIsPassedTheSensorIn(){
+		return isPassedTheSensorIn;
+	}
+	
+	public boolean getIsPassedTheSensorOut(){
+		return isPassedTheSensorOut;
+	}
+	
 	public void setPositionX(int x) {
 		positionX = x;
 	}
@@ -74,6 +89,14 @@ public class Train {
 		this.isMoving = isMoving;
 	}
 	
+	public void passedTheSensorIn(){
+		isPassedTheSensorIn = true;
+	}
+	
+	public void passedTheSensorOut(){
+		isPassedTheSensorOut = true;
+	}
+	
 	public void move() {
 		
 		if (isGoingRight) {
@@ -82,7 +105,6 @@ public class Train {
 			if (positionX <= 170) {
 				
 				positionX += velocity;
-				System.out.println(positionX);
 			}
 			
 			// Na curva para entrar no tunel
@@ -145,5 +167,23 @@ public class Train {
 				positionX -= velocity;
 			}
 		}
+		
+		ListIterator<Observer> li = lst.listIterator();
+		
+		while(li.hasNext()){
+			li.next().update();
+		}
 	}
+
+	@Override
+	public void addObserver(Observer o) {
+		lst.add(o);
+	}
+
+	@Override
+	public void removeObserver(Observer o) { }
+
+	@Override
+	public void notifyObserver(Observer o) { }
+	
 }
