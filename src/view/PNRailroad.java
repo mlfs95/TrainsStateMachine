@@ -31,7 +31,6 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observer
 	TrainManager trainManager = TrainManager.getInstance();
 	TrafficManager trafficManager = TrafficManager.getInstance();
 	private int altura, largura;
-	private JButton button1, button2;
 	
 	public PNRailroad(){
 		super();
@@ -51,16 +50,6 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observer
 		altura = (int) (i.getHeight(null)*0.8);
 		largura = (int) (i.getWidth(null)*0.8);
 		
-		button1 = new JButton("Adicionar trens a esquerda");
-		button1.setLocation(270, largura/2);
-		button1.addActionListener(this);
-		this.add(button1);
-		
-		button2 = new JButton("Adicionar trens a direita");
-		button2.setLocation(300, largura/2);
-		button2.addActionListener(this);
-		this.add(button2);
-		
 		i2 = i.getScaledInstance(largura, altura, 100 );
 	}
 	
@@ -69,6 +58,14 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observer
 			instance = new PNRailroad();
 		}
 		return instance;
+	}
+	
+	public int getLargura(){
+		return largura;
+	}
+	
+	public int getAltura(){
+		return altura;
 	}
 	
 	protected void paintComponent(Graphics g){
@@ -134,22 +131,22 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observer
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == button1){
+	/*	if(e.getSource() == button1){
 			printPositionsLeft();
 		}
 		else if(e.getSource() == button2){
 			printPositionsRight();
-		}
+		} */
 	}
 
 	private void printPositionsLeft(){
 		
-		trainManager.addTrainLeft(largura, altura);
+		//trainManager.addTrainLeft(largura, altura);
 		//trainManager.addTrainRight(largura, altura);
 	}
 	
 	private void printPositionsRight(){
-		trainManager.addTrainRight(largura, altura);
+		//trainManager.addTrainRight(largura, altura);
 	}
 	
 	

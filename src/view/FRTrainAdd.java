@@ -8,22 +8,22 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import controller.TrainManager;
+
 public class FRTrainAdd extends JFrame implements ActionListener {
-	private JButton b1, b2,be1,be2,be3,bd1,bd2,bd3;
+	private JButton be1,be2,be3,bd1,bd2,bd3;
 	private JLabel l1,l2;
 	private Container screen;
 	private static FRTrainAdd instance = null;
+	private int largura = PNRailroad.getInstance().getLargura();
+	private int altura = PNRailroad.getInstance().getAltura();
+	private TrainManager trainManager = TrainManager.getInstance();
 	
 	FRTrainAdd(String s){
 		super(s);
 		
 		screen = getContentPane();
 		screen.setLayout(null);
-		
-		b1 = new JButton("Adicionar trens a esquerda");
-		b2 = new JButton("adicionar trens a direita");
-		b1.setBounds(20, 20, 200, 30);
-		b2.setBounds(350, 20, 200, 30);
 		
 		be1 = new JButton("60 Km/h");
 		be2 = new JButton("80 Km/h");
@@ -32,21 +32,19 @@ public class FRTrainAdd extends JFrame implements ActionListener {
 		bd2 = new JButton("80 Km/h");
 		bd3 = new JButton("100 Km/h");
 		
-		l1 = new JLabel("Alterar velocidade dos trens a esquerda:");
-		l2 = new JLabel("alterar velocidade dos trens a direita:");
-		l1.setBounds(20,60,400,30);
-		l2.setBounds(350, 60, 400, 30);
+		l1 = new JLabel("Adicionar trens a esquerda:");
+		l2 = new JLabel("Adicionar trens a direita:");
+		l1.setBounds(20,20,400,30);
+		l2.setBounds(270, 20, 400, 30);
 		
-		be1.setBounds(20, 100, 90, 30);
-		be2.setBounds(20, 140, 90, 30);
-		be3.setBounds(20, 180, 90, 30);
+		be1.setBounds(20, 60, 90, 30);
+		be2.setBounds(20, 100, 90, 30);
+		be3.setBounds(20, 140, 90, 30);
 		
-		bd1.setBounds(350, 100, 90, 30);
-		bd2.setBounds(350, 140, 90, 30);
-		bd3.setBounds(350, 180, 90, 30);
+		bd1.setBounds(270, 60, 90, 30);
+		bd2.setBounds(270, 100, 90, 30);
+		bd3.setBounds(270, 140, 90, 30);
 		
-		screen.add(b1);
-		screen.add(b2);
 		screen.add(l1);
 		screen.add(l2);
 		screen.add(be1);
@@ -56,8 +54,6 @@ public class FRTrainAdd extends JFrame implements ActionListener {
 		screen.add(bd2);
 		screen.add(bd3);
 		
-		b1.addActionListener(this);
-		b2.addActionListener(this);
 		be1.addActionListener(this);
 		be2.addActionListener(this);
 		bd1.addActionListener(this);
@@ -70,7 +66,7 @@ public class FRTrainAdd extends JFrame implements ActionListener {
 	
 	public static FRTrainAdd getInstance(){
 		if(instance == null){
-			instance = new FRTrainAdd("alterar trens");
+			instance = new FRTrainAdd("janela trens");
 		}
 		return instance;
 	}
@@ -78,6 +74,25 @@ public class FRTrainAdd extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource() == be1){
+			trainManager.addTrainLeftSlow(largura, altura);
+		}
+		else if(e.getSource() == be2){
+			trainManager.addTrainLeftMedium(largura, altura);
+		}
+		else if(e.getSource() == be3){
+			trainManager.addTrainLeftFast(largura, altura);
+		}
+		else if(e.getSource() == bd1){
+			trainManager.addTrainRightSlow(largura, altura);
+		}
+		else if(e.getSource() == bd2){
+			trainManager.addTrainRightMedium(largura, altura);
+		}
+		else if(e.getSource() == bd3){
+			trainManager.addTrainRightFast(largura, altura);
+			
+		}
 		
 	}
 

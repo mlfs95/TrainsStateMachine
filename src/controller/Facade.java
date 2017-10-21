@@ -34,7 +34,7 @@ public class Facade {
 	
 	public void startFRTrainAdd(){
 		frtrainadd = FRTrainAdd.getInstance();
-		frtrainadd.setSize(600,270);
+		frtrainadd.setSize(500,220);
 		frtrainadd.setVisible(true);
 	}
 	

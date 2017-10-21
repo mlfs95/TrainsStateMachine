@@ -49,6 +49,7 @@ public class Train implements model.Observable {
 		}
 	}
 	
+	
 	public float getPositionX() {
 		return positionX;
 	}

@@ -29,7 +29,6 @@ public class TrainManager {
 	private int qtdtrainsLeft = 0;
 	private boolean checkLeft = false;
 	private boolean checkRight = false;
-	
 	private int timerSpeed = 33;
 	
 	public TrainManager(){
@@ -163,14 +162,40 @@ public class TrainManager {
 		}
 	}
 	
-	public void addTrainLeft(int largura, int altura) {
+	
+	
+	public void addTrainLeftFast(int largura, int altura) {
 		Train train = new Train(true, largura, altura, speed.FAST);
 		train.addObserver(PNRailroad.getInstance());
 		trainsLeft.insFin(train);
 	}
+	
+	public void addTrainLeftMedium(int largura, int altura) {
+		Train train = new Train(true, largura, altura, speed.MEDIUM);
+		train.addObserver(PNRailroad.getInstance());
+		trainsLeft.insFin(train);
+	}
+	
+	public void addTrainLeftSlow(int largura, int altura) {
+		Train train = new Train(true, largura, altura, speed.SLOW);
+		train.addObserver(PNRailroad.getInstance());
+		trainsLeft.insFin(train);
+	}
 		
-	public void addTrainRight(int largura, int altura) {
+	public void addTrainRightFast(int largura, int altura) {
 		Train train = new Train(false, largura, altura, speed.FAST);
+		train.addObserver(PNRailroad.getInstance());
+		trainsRight.insFin(train);
+	}
+	
+	public void addTrainRightMedium(int largura, int altura) {
+		Train train = new Train(false, largura, altura, speed.MEDIUM);
+		train.addObserver(PNRailroad.getInstance());
+		trainsRight.insFin(train);
+	}
+	
+	public void addTrainRightSlow(int largura, int altura) {
+		Train train = new Train(false, largura, altura, speed.SLOW);
 		train.addObserver(PNRailroad.getInstance());
 		trainsRight.insFin(train);
 	}
