@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -23,18 +22,15 @@ public class Train implements model.Observable {
 		this.isGoingRight = isGoingRight;
 		this.isMoving = true;
 		
-		System.out.println(speed);
 		switch (speed) {
 		
 			case FAST:
-				System.out.println("it is really fast");
-				velocity = (float) 1.1; //1.1
+				velocity = (float) 1.1;
 				break;
 			case MEDIUM:
 				velocity = (float) 0.92;
 				break;
 			case SLOW:
-				System.out.println("it is actually slow");
 				velocity = (float) 0.69;
 				break;
 		}

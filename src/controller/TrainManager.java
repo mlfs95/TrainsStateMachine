@@ -1,18 +1,14 @@
 package controller;
 
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.ListIterator;
 
 import javax.swing.Timer;
 
 import model.Lista;
 import model.No;
-import model.Observer;
 import model.Sensor;
-import model.TrafficLight;
+import model.Traffic;
 import model.Train;
 import model.Train.speed;
 import view.PNRailroad;
@@ -23,8 +19,7 @@ public class TrainManager {
 	private Lista trainsLeft;
 	private Lista trainsRight;
 	private Sensor sensorin1, sensorout1, sensorin2,sensorout2;
-	private TrafficLight trafficLeft;
-	private TrafficLight trafficRight;
+	private Traffic traffic;
 	private int qtdtrainsRight = 0;
 	private int qtdtrainsLeft = 0;
 	private boolean checkLeft = false;
@@ -41,27 +36,19 @@ public class TrainManager {
 		sensorin2 = new Sensor(1100,370);
 		sensorout1 = new Sensor(1100,270);
 		sensorout2 = new Sensor(165,370);
-		
-		// Cria os sinais
-        trafficLeft = new TrafficLight();
-        trafficRight = new TrafficLight();
-        trafficRight.setIsGreen(false);
-        trafficLeft.setIsGreen(true);
         
+        traffic = new Traffic();
 		
 		Timer timer = new Timer(timerSpeed, new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				System.out.println("qtdTrainsLeft: " + qtdtrainsLeft);
-				System.out.println("qtdTrainsRight: " + qtdtrainsRight);
 				moveTrains();
 			}
 		});
 		timer.start();
 	}
-	
+
 	public static TrainManager getInstance(){
 		if(instance == null){
 			instance = new TrainManager();
@@ -80,16 +67,16 @@ public class TrainManager {
 			
 			if((int)(train.getPositionX()) >= sensorin1.get_x()+5 && !train.getIsPassedTheSensorIn()){
 				train.passedTheSensorIn();
-				qtdtrainsLeft++;
+				traffic.trainsLeftIn();
 			}
 			
 			if((int)(train.getPositionX()) >= sensorout1.get_x() && !train.getIsPassedTheSensorOut()){
 				train.passedTheSensorOut();
-				qtdtrainsLeft--;
+				traffic.trainsLeftOut();
 			}
 			
-			// Caso o semaforo esteja vermelho ele para
-			if ((int)(train.getPositionX()) >= sensorin1.get_x() && !trafficLeft.getIsGreen() && (int)(train.getPositionX()) <= sensorout1.get_x()){  }
+			// Caso o semaforo esteja vermelho ele não se move
+			if ((int)(train.getPositionX()) >= sensorin1.get_x() && traffic.status().equals("RightOpened") && (int)(train.getPositionX()) <= sensorout1.get_x()){  }
 			
 			else {
 				
@@ -117,15 +104,15 @@ public class TrainManager {
 			
 			if((int)(train.getPositionX()) <= sensorin2.get_x()-5 && !train.getIsPassedTheSensorIn()){
 				train.passedTheSensorIn();
-				qtdtrainsRight++;
+				traffic.trainsRightIn();
 			}
 			
 			if((int)(train.getPositionX()) <= sensorout2.get_x() && !train.getIsPassedTheSensorOut()){
 				train.passedTheSensorOut();
-				qtdtrainsRight--;
+				traffic.trainsRightOut();
 			}
 			
-			if ((int)(train.getPositionX()) <= sensorin2.get_x() && !trafficRight.getIsGreen() && (int)(train.getPositionX()) >= sensorout2.get_x()){  }
+			if ((int)(train.getPositionX()) <= sensorin2.get_x() && traffic.status().equals("LeftOpened") && (int)(train.getPositionX()) >= sensorout2.get_x()){  }
 			
 			else { 
 
@@ -147,18 +134,6 @@ public class TrainManager {
 				
 				}
 			}
-		}
-		
-		if(qtdtrainsLeft == 0) {
-			trafficRight.setIsGreen(true);
-		} else {
-			trafficRight.setIsGreen(false);
-		}
-		
-		if(qtdtrainsRight == 0) {
-			trafficLeft.setIsGreen(true);
-		} else {
-			trafficLeft.setIsGreen(false);
 		}
 	}
 	
@@ -232,6 +207,14 @@ public class TrainManager {
 		return qtdtrainsRight;
 	}
 	
+	public void setqtdtrainLeft(int qtd){
+		qtdtrainsLeft = qtd;
+	}
+	
+	public void setqtdtrainsRight(int qtd){
+		qtdtrainsRight = qtd;
+	}
+	
 	public boolean getcheckLeft(){
 		return checkLeft;
 	}
@@ -247,13 +230,9 @@ public class TrainManager {
 	public void setcheckRight(boolean check){
 		 this.checkRight = check;
 	}
-
-    public TrafficLight getTrafficLeft() {
-		return trafficLeft;
-	}
 	
-	public TrafficLight getTrafficRight() {
-		return trafficRight;
+	public Traffic getTraffic(){
+		return traffic;
 	}
 }
 

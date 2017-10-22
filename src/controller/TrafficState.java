@@ -1,11 +1,11 @@
 package controller;
 
+import model.Traffic;
+
 public abstract class TrafficState {
 	
-	private static TrafficManager traffic;
 	
-	public static TrafficState getInitialState(TrafficManager t){
-		traffic = t;
+	public static TrafficState getInitialState(Traffic t){
 		return new BothOpened();
 	}
 	
@@ -13,5 +13,6 @@ public abstract class TrafficState {
 	public abstract TrafficState trainsLeftOut();
 	public abstract TrafficState trainsRightIn();
 	public abstract TrafficState trainsRightOut();
+	public abstract String status();
 
 }

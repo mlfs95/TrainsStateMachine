@@ -3,33 +3,21 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
-import controller.TrafficManager;
 import controller.TrainManager;
 import model.Lista;
-import model.Observable;
-import model.Observer;
-import model.Sensor;
 import model.Train;
 
-public class PNRailroad extends JPanel implements ActionListener, model.Observer {
+public class PNRailroad extends JPanel implements model.Observer {
 	private static PNRailroad instance = null;
 	private Image i, i2;
 	TrainManager trainManager = TrainManager.getInstance();
-	TrafficManager trafficManager = TrafficManager.getInstance();
 	private int altura, largura;
 	
 	public PNRailroad(){
@@ -102,23 +90,23 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observer
 		g2d.draw(s2);
 		
 		// Desenha as luzes dos sinais
-		if(TrainManager.getInstance().getTrafficLeft().getIsGreen()){
+		if(TrainManager.getInstance().getTraffic().status().equals("BothOpened")){
 			g2d.setColor(Color.GREEN);
 			g2d.fillOval(307, 210, 15, 15);
+			g2d.fillOval(990, 430, 15, 15);
 		}
-		else{
-			g2d.setColor(Color.RED);
-			g2d.fillOval(307, 230, 15, 15); 
-		} 
-		
-		if(TrainManager.getInstance().getTrafficRight().getIsGreen()){
+		else if (TrainManager.getInstance().getTraffic().status().equals("LeftOpened")){
 			g2d.setColor(Color.GREEN);
-			g2d.fillOval(990, 410, 15, 15);
-		}
-		else{
+			g2d.fillOval(307, 210, 15, 15);
 			g2d.setColor(Color.RED);
 			g2d.fillOval(990, 430, 15, 15);
-		} 
+		}
+		else {
+			g2d.setColor(Color.RED);
+			g2d.fillOval(307, 210, 15, 15);
+			g2d.setColor(Color.GREEN);
+			g2d.fillOval(990, 430, 15, 15);
+		}
 		
 		// Desenha sensores
 		g2d.setColor(Color.blue);
@@ -128,34 +116,6 @@ public class PNRailroad extends JPanel implements ActionListener, model.Observer
 		g2d.fillOval(TrainManager.getInstance().getSensorout2().get_x(), TrainManager.getInstance().getSensorout2().get_y(), 10, 10);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-	/*	if(e.getSource() == button1){
-			printPositionsLeft();
-		}
-		else if(e.getSource() == button2){
-			printPositionsRight();
-		} */
-	}
-
-	private void printPositionsLeft(){
-		
-		//trainManager.addTrainLeft(largura, altura);
-		//trainManager.addTrainRight(largura, altura);
-	}
-	
-	private void printPositionsRight(){
-		//trainManager.addTrainRight(largura, altura);
-	}
-	
-	
-	public void mouseClicked(MouseEvent e) {
-//	    int x=e.getX();
-//	    int y=e.getY();
-//	    System.out.println(x+","+y);//these co-ords are relative to the component
-	}
-
 	@Override
 	public void update() {
 		repaint();

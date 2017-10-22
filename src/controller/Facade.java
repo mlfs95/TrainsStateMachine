@@ -7,7 +7,6 @@ public class Facade {
 	private static Facade instance = null;
 	private FRRailroad frrailroad;
 	private TrainManager trainmanager;
-	private TrafficManager trafficmanager;
 	private FRTrainAdd frtrainadd;
 	
 	public static Facade getInstance(){
@@ -26,10 +25,6 @@ public class Facade {
 	
 	public void startTrainManager(){
 		trainmanager = TrainManager.getInstance();
-	}
-	
-	public void startTrafficManager(){
-		trafficmanager = TrafficManager.getInstance();
 	}
 	
 	public void startFRTrainAdd(){

@@ -1,5 +1,4 @@
 package controller;
-import view.FRRailroad;
 
 public class Main {
 
@@ -7,9 +6,7 @@ public class Main {
 		Facade f = Facade.getInstance();
 		f.startFRRailroad();
 		f.startTrainManager();
-		f.startTrafficManager();
 		f.startFRTrainAdd();
-		
 	}
 
 }

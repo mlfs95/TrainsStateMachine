@@ -6,9 +6,14 @@ public class BothOpened extends TrafficState {
 		
 	}
 
+	public String status(){
+		return "BothOpened";
+	}
+	
 	@Override
 	public TrafficState trainsLeftIn() {
 		
+		TrainManager.getInstance().setqtdtrainLeft(TrainManager.getInstance().getqtdtrainsLeft()+1);
 		return new LeftOpened();
 	}
 
@@ -21,6 +26,7 @@ public class BothOpened extends TrafficState {
 	@Override
 	public TrafficState trainsRightIn() {
 		
+		TrainManager.getInstance().setqtdtrainsRight(TrainManager.getInstance().getqtdtrainsRight()+1);
 		return new RightOpened();
 	}
 
