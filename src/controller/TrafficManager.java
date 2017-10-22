@@ -1,24 +1,19 @@
 package controller;
 
-import java.util.Observable;
-import java.util.Observer;
 
-import model.Sensor;
-import model.TrafficLight;
-import view.PNRailroad;
 
 public class TrafficManager {
-	
 	 private static TrafficManager instance = null;
+	 public enum State{
+		 LEFTOPENED, RIGHTOPENED, BOTHOPENED;
+	 }
 	 
-	 private int trainsInTunel = 0;
+	 private State state;
 	   
 	    public TrafficManager(){
 	       
-	       
 	    }
 	    
-	   
 	    public static TrafficManager getInstance(){
 	        if(instance == null){
 	            instance = new TrafficManager();
@@ -27,28 +22,14 @@ public class TrafficManager {
 	        return instance;
 	    }
 	    
-//
-//		@Override
-//		public void update(Observable o, Object arg) {
-//			
-//		}
-//
-//		@Override
-//		public void update() {
-//			System.out.println("Observer ativado");
-//			//System.out.println("quantidade de trens: " + TrainManager.getInstance().getqtdtrainsLeft() );
-//			
-//			if(trafficLeft.getIsGreen() == true && trafficRight.getIsGreen() == false){
-//				trafficLeft.setIsGreen(false);
-//				trafficRight.setIsGreen(true);
-//			}
-//			else if(trafficRight.getIsGreen() == true && trafficLeft.getIsGreen() == false){
-//				trafficRight.setIsGreen(false);
-//				trafficLeft.setIsGreen(true);
-//			}
-//			else if(trafficLeft.getIsGreen() == false && trafficRight.getIsGreen() == false){
-//				trafficLeft.setIsGreen(true);
-//			}
-//			
-//		}
+	    public String status(){
+	    	switch(state)
+	    	{
+	    		case LEFTOPENED: return "left opened";
+	    		case RIGHTOPENED: return "right opened";
+	    		case BOTHOPENED: return "both opened";
+	    		default: return " both opened";
+	    	}
+	    }
+	    
 }
