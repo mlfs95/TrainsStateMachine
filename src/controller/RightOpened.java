@@ -2,9 +2,7 @@ package controller;
 
 public class RightOpened extends TrafficState {
 	
-	public RightOpened(){
-		
-	}
+	public RightOpened(){ }
 	
 	public String status(){
 		return "RightOpened";
